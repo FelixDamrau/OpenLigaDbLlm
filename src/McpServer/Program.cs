@@ -1,23 +1,25 @@
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using OpenLigaDb.McpServer.Generated;
 using OpenLigaDb.McpServer.Tools;
 
-var builder = Host.CreateApplicationBuilder(args);
+var builder = WebApplication.CreateBuilder(args);
 
-builder.Logging.AddConsole(consoleLogOptions =>
-{
-    // Configure all logs to go to stderr
-    consoleLogOptions.LogToStandardErrorThreshold = LogLevel.Trace;
-});
+// builder.Logging.AddConsole(consoleLogOptions =>
+// {
+//     // Configure all logs to go to stderr
+//     consoleLogOptions.LogToStandardErrorThreshold = LogLevel.Trace;
+// });
 
 builder.Services
     .AddMcpServer()
-    .WithStdioServerTransport()
+    .WithHttpTransport()
     .WithTools<OpenLigaDbTools>();
 
 builder.Services
-    .AddSingleton<OpenLigaDbServiceClient>();
+    .AddHttpClient()
+    .AddSingleton(s => new OpenLigaDbServiceClient("https://api.openligadb.de", s.GetService<HttpClient>()));
 
-await builder.Build().RunAsync();
+var app = builder.Build();
+
+app.MapMcp();
+
+app.Run();

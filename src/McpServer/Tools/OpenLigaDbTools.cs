@@ -12,4 +12,7 @@ public class OpenLigaDbTools(OpenLigaDbServiceClient client)
 
     [McpServerTool(Name = "getAvailableLeagues"), Description("Gets all available leagues")]
     public async Task<ICollection<League>> GetAvailableLeagues() => await client.GetavailableleaguesAsync().ConfigureAwait(false);
+
+    [McpServerTool(Name = "echo"), Description("Echoes the given message.")]
+    public string Echo(string message) => $"Echo: {message}";
 }

@@ -16,11 +16,8 @@ using OpenAI;
 //     .Build();
 // using var loggerFactory = LoggerFactory.Create(builder => builder.AddOpenTelemetry(opt => opt.AddOtlpExporter()));
 
-// Connect to an MCP server
-Console.WriteLine("Connecting client to MCP 'everything cs' server");
+Console.WriteLine("Connecting client to MCP 'OpenLigaDb' server");
 
-// Create OpenAI client (or any other compatible with IChatClient)
-// Provide your own OPENAI_API_KEY via an environment variable.
 var openAIClient = new OpenAIClient(Environment.GetEnvironmentVariable("OPENAI_API_KEY")).GetChatClient("gpt-4.1-nano"); //gpt-4o-mini
 
 // Create a sampling client.
@@ -28,16 +25,14 @@ using IChatClient samplingClient = openAIClient.AsIChatClient()
     .AsBuilder()
     // .UseOpenTelemetry(loggerFactory: loggerFactory, configure: o => o.EnableSensitiveData = true)
     .Build();
-Console.WriteLine(Directory.GetCurrentDirectory());
+
+var transport = new SseClientTransport(new() 
+{
+    Endpoint = new Uri($"http://localhost:5000/sse"),
+});
+
 var mcpClient = await McpClientFactory.CreateAsync(
-    new StdioClientTransport(new StdioClientTransportOptions()
-    {
-        Command = "dotnet",
-        WorkingDirectory = @"C:\Dev\OpenLigaDbLlm",
-        Arguments = ["run", "--project", ".\\src\\McpServer\\ScpServer.csproj"],
-        Name = "Everything CS",
-        
-    }),
+    transport,
     clientOptions: new()
     {
         Capabilities = new() { Sampling = new() { SamplingHandler = samplingClient.CreateSamplingHandler() } },
