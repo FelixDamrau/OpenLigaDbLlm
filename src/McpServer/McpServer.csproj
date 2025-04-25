@@ -11,6 +11,9 @@
     <PackageReference Include="ModelContextProtocol.AspNetCore" />
     <PackageReference Include="Newtonsoft.Json" />
     <PackageReference Include="NSwag.ApiDescription.Client" />
+    <PackageReference Include="Serilog" />
+    <PackageReference Include="Serilog.Extensions.Logging" />
+    <PackageReference Include="Serilog.Sinks.Console" />
   </ItemGroup>
 
   <Target Name="GenerateOpenApiClient" BeforeTargets="CoreCompile">
