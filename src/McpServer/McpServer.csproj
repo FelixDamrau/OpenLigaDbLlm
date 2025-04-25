@@ -1,15 +1,32 @@
 <Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
     <TargetFramework>net9.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <RootNamespace>OpenLigaDb.McpServer</RootNamespace>
+    <OutputType>Exe</OutputType>
   </PropertyGroup>
-
   <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.Hosting" />
     <PackageReference Include="ModelContextProtocol" />
+    <PackageReference Include="Newtonsoft.Json" />
+    <PackageReference Include="NSwag.ApiDescription.Client" />
   </ItemGroup>
+
+  <Target Name="GenerateOpenApiClient" BeforeTargets="CoreCompile">
+    <PropertyGroup>
+      <GeneratedClientPath>$(IntermediateOutputPath)Generated/OpenLigaDbServiceClient.cs</GeneratedClientPath>
+      <NSwagCommand>openapi2csclient</NSwagCommand>
+      <NSwagInput>https://api.openligadb.de/swagger/v1/swagger.json</NSwagInput>
+      <NSwagClassName>OpenLigaDbServiceClient</NSwagClassName>
+      <NSwagNamespace>OpenLigaDb.McpServer.Generated</NSwagNamespace>
+    </PropertyGroup>
+
+    <Exec Command='nswag $(NSwagCommand) /Input:$(NSwagInput) /Output:"$(GeneratedClientPath)" /ClassName:$(NSwagClassName) /Namespace:$(NSwagNamespace)' />
+
+    <ItemGroup>
+      <Compile Include="$(GeneratedClientPath)" />
+    </ItemGroup>
+  </Target>
 
 </Project>

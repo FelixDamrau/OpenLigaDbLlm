@@ -1,6 +1,8 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using OpenLigaDb.McpServer.Generated;
+using OpenLigaDb.McpServer.Tools;
 
 var builder = Host.CreateApplicationBuilder(args);
 
@@ -12,4 +14,10 @@ builder.Logging.AddConsole(consoleLogOptions =>
 
 builder.Services
     .AddMcpServer()
-    .WithStdioServerTransport();
+    .WithStdioServerTransport()
+    .WithTools<OpenLigaDbTools>();
+
+builder.Services
+    .AddSingleton<OpenLigaDbServiceClient>();
+
+await builder.Build().RunAsync();
