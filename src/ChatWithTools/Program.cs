@@ -1,7 +1,6 @@
 ﻿using ModelContextProtocol.Client;
 using ModelContextProtocol.Protocol.Transport;
 using Microsoft.Extensions.AI;
-using Microsoft.Extensions.Logging;
 using OpenAI;
 using System.ClientModel;
 
@@ -24,7 +23,7 @@ var options = new OpenAIClientOptions()
     Endpoint = new("https://openrouter.ai/api/v1"),
 };
 var apiKeyCredential = new ApiKeyCredential(Environment.GetEnvironmentVariable("OPENROUTER_API_KEY")!);
-var openAIClient = new OpenAIClient(apiKeyCredential, options).GetChatClient("google/gemini-2.0-flash-001");
+var openAIClient = new OpenAIClient(apiKeyCredential, options).GetChatClient("openai/gpt-4.1-nano");
 
 // Create a sampling client.
 using IChatClient samplingClient = openAIClient.AsIChatClient()
