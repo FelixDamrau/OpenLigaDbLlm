@@ -3,18 +3,23 @@ using ModelContextProtocol.Protocol.Transport;
 using Microsoft.Extensions.AI;
 using OpenAI;
 using System.ClientModel;
+using OpenTelemetry;
+using OpenTelemetry.Metrics;
+using OpenTelemetry.Trace;
+using Microsoft.Extensions.Logging;
+using OpenTelemetry.Logs;
 
-// using var tracerProvider = Sdk.CreateTracerProviderBuilder()
-//     .AddHttpClientInstrumentation()
-//     .AddSource("*")
-//     .AddOtlpExporter()
-//     .Build();
-// using var metricsProvider = Sdk.CreateMeterProviderBuilder()
-//     .AddHttpClientInstrumentation()
-//     .AddMeter("*")
-//     .AddOtlpExporter()
-//     .Build();
-// using var loggerFactory = LoggerFactory.Create(builder => builder.AddOpenTelemetry(opt => opt.AddOtlpExporter()));
+using var tracerProvider = Sdk.CreateTracerProviderBuilder()
+    .AddHttpClientInstrumentation()
+    .AddSource("*")
+    .AddOtlpExporter()
+    .Build();
+using var metricsProvider = Sdk.CreateMeterProviderBuilder()
+    .AddHttpClientInstrumentation()
+    .AddMeter("*")
+    .AddOtlpExporter()
+    .Build();
+using var loggerFactory = LoggerFactory.Create(builder => builder.AddOpenTelemetry(opt => opt.AddOtlpExporter()));
 
 Console.WriteLine("Connecting client to MCP 'OpenLigaDb' server");
 
@@ -25,10 +30,9 @@ var options = new OpenAIClientOptions()
 var apiKeyCredential = new ApiKeyCredential(Environment.GetEnvironmentVariable("OPENROUTER_API_KEY")!);
 var openAIClient = new OpenAIClient(apiKeyCredential, options).GetChatClient("openai/gpt-4.1-nano");
 
-// Create a sampling client.
 using IChatClient samplingClient = openAIClient.AsIChatClient()
     .AsBuilder()
-    // .UseOpenTelemetry(loggerFactory: loggerFactory, configure: o => o.EnableSensitiveData = true)
+    .UseOpenTelemetry(loggerFactory: loggerFactory, configure: o => o.EnableSensitiveData = true)
     .Build();
 
 var transport = new SseClientTransport(new() 
@@ -41,11 +45,11 @@ var mcpClient = await McpClientFactory.CreateAsync(
     clientOptions: new()
     {
         Capabilities = new() { Sampling = new() { SamplingHandler = samplingClient.CreateSamplingHandler() } },
-    }
-    // ,loggerFactory: loggerFactory
+    },
+    loggerFactory
     );
 
-// Get all available tools
+
 Console.WriteLine("Tools available:");
 var tools = await mcpClient.ListToolsAsync();
 foreach (var tool in tools)
@@ -55,11 +59,10 @@ foreach (var tool in tools)
 
 Console.WriteLine();
 
-// Create an IChatClient that can use the tools.
-using IChatClient chatClient = openAIClient.AsIChatClient()
+using var chatClient = openAIClient.AsIChatClient()
     .AsBuilder()
     .UseFunctionInvocation()
-    // .UseOpenTelemetry(loggerFactory: loggerFactory, configure: o => o.EnableSensitiveData = true)
+    .UseOpenTelemetry(loggerFactory, configure: o => o.EnableSensitiveData = true)
     .Build();
 
 // Have a conversation, making all tools available to the LLM.
