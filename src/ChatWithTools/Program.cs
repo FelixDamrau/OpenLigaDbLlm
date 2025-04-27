@@ -8,18 +8,29 @@ using OpenTelemetry.Metrics;
 using OpenTelemetry.Trace;
 using Microsoft.Extensions.Logging;
 using OpenTelemetry.Logs;
+using OpenTelemetry.Resources;
+
+var serviceName = "OpenLigaDbLlm";
+var resourceBuilder = ResourceBuilder.CreateDefault()
+    .AddService(serviceName: serviceName, serviceInstanceId: Environment.MachineName);
 
 using var tracerProvider = Sdk.CreateTracerProviderBuilder()
     .AddHttpClientInstrumentation()
+    .SetResourceBuilder(resourceBuilder)
     .AddSource("*")
     .AddOtlpExporter()
     .Build();
 using var metricsProvider = Sdk.CreateMeterProviderBuilder()
     .AddHttpClientInstrumentation()
+    .SetResourceBuilder(resourceBuilder)
     .AddMeter("*")
     .AddOtlpExporter()
     .Build();
-using var loggerFactory = LoggerFactory.Create(builder => builder.AddOpenTelemetry(opt => opt.AddOtlpExporter()));
+using var loggerFactory = LoggerFactory.Create(builder => builder.AddOpenTelemetry(opt =>
+{
+    opt.AddOtlpExporter();
+    opt.SetResourceBuilder(resourceBuilder);
+}));
 
 Console.WriteLine("Connecting client to MCP 'OpenLigaDb' server");
 

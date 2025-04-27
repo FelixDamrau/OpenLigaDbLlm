@@ -5,6 +5,8 @@ receivers:
       http:
 
 exporters:
+  loki:
+    endpoint: http://localhost:3100/loki/api/v1/push
   debug:
     verbosity: detailed
 
@@ -12,7 +14,7 @@ service:
   pipelines:
     logs:
       receivers: [otlp]
-      exporters: [debug]
+      exporters: [loki, debug]
     traces:
       receivers: [otlp]
       exporters: [debug]
