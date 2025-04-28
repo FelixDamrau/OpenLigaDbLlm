@@ -36,11 +36,20 @@ using var loggerFactory = LoggerFactory.Create(builder => builder.AddOpenTelemet
 
 Console.WriteLine("Connecting client to MCP 'OpenLigaDb' server");
 
+var openRouterApiKey = Environment.GetEnvironmentVariable("OPENROUTER_API_KEY")
+    ?? throw new InvalidOperationException("Open router API key is missing!");
+var heliconeApiKey = Environment.GetEnvironmentVariable("HELICONE_API_KEY")
+    ?? throw new InvalidOperationException("Helicone API key is missing!");
+
 var options = new OpenAIClientOptions()
 {
-    Endpoint = new("https://openrouter.ai/api/v1"),
+    Endpoint = new("https://openrouter.helicone.ai/api/v1"),
 };
-var apiKeyCredential = new ApiKeyCredential(Environment.GetEnvironmentVariable("OPENROUTER_API_KEY")!);
+
+// We need this header for the helicone auth
+options.AddPolicy(new CustomHeaderPolicy("Helicone-Auth", $"Bearer {heliconeApiKey}"), PipelinePosition.PerCall);
+
+var apiKeyCredential = new ApiKeyCredential(openRouterApiKey);
 var openAIClient = new OpenAIClient(apiKeyCredential, options).GetChatClient("openai/gpt-4.1-nano");
 
 using IChatClient samplingClient = openAIClient.AsIChatClient()
