@@ -5,10 +5,6 @@
     <TargetFramework>net9.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <!--
-    Anthropic SDK isn't AOT compatible yet
-    <PublishAot>true</PublishAot>
-    -->
   </PropertyGroup>
 
   <ItemGroup>
@@ -18,10 +14,6 @@
     <PackageReference Include="ModelContextProtocol.AspNetCore" />
     <PackageReference Include="OpenTelemetry.Exporter.OpenTelemetryProtocol" />
     <PackageReference Include="OpenTelemetry.Instrumentation.Http" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <!-- <ProjectReference Include="..\..\src\ModelContextProtocol\ModelContextProtocol.csproj" /> -->
   </ItemGroup>
 
 </Project>
