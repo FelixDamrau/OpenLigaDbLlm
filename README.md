@@ -21,7 +21,7 @@ This project involves running the C# applications and a monitoring stack using D
 1. **Clone the repository:**
 
    ```bash
-   git clone <repository_url>
+   git clone https://github.com/FelixDamrau/OpenLigaDbLlm.git
    cd OpenLigaDbLlm
    ```
 
@@ -51,6 +51,15 @@ This project involves running the C# applications and a monitoring stack using D
 ## MCP Server
 
 The `McpServer` project implements an MCP server that exposes tools for interacting with the OpenLigaDb API. These tools can be used by an MCP-compatible client (like the included ChatClient) to retrieve data from OpenLigaDb.
+
+### MCP Server Tools
+
+The MCP server exposes the following tools:
+
+- `getAvailableLeagues`: Gets all available leagues
+- `getFilteredLeagues`: Gets all available leagues that match the given filter
+- `getAllTeams`: Gets all teams for the given league in the given season
+- `echo`: Echoes the given message. This tool is mainly for debugging purposes.
 
 ## ChatClient
 
