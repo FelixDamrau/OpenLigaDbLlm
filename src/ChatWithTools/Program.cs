@@ -48,6 +48,9 @@ var options = new OpenAIClientOptions()
 
 // We need this header for the helicone auth
 options.AddPolicy(new CustomHeaderPolicy("Helicone-Auth", $"Bearer {heliconeApiKey}"), PipelinePosition.PerCall);
+// We use these headers to propagate the app name to OpenRouter
+options.AddPolicy(new CustomHeaderPolicy("X-Title", "OpenLigaDbLlm"), PipelinePosition.PerCall);
+options.AddPolicy(new CustomHeaderPolicy("HTTP-Referer", "https://github.com/FelixDamrau/OpenLigaDbLlm"), PipelinePosition.PerCall);
 
 var apiKeyCredential = new ApiKeyCredential(openRouterApiKey);
 var openAIClient = new OpenAIClient(apiKeyCredential, options).GetChatClient("openai/gpt-4.1-nano");
