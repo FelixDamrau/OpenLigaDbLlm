@@ -1,14 +1,16 @@
-﻿using ModelContextProtocol.Client;
-using ModelContextProtocol.Protocol.Transport;
+﻿using System.ClientModel;
+using System.ClientModel.Primitives;
 using Microsoft.Extensions.AI;
-using OpenAI;
-using System.ClientModel;
-using OpenTelemetry;
-using OpenTelemetry.Metrics;
-using OpenTelemetry.Trace;
 using Microsoft.Extensions.Logging;
+using ModelContextProtocol.Client;
+using ModelContextProtocol.Protocol.Transport;
+using OpenAI;
+using OpenLigaDb.Client;
+using OpenTelemetry;
 using OpenTelemetry.Logs;
+using OpenTelemetry.Metrics;
 using OpenTelemetry.Resources;
+using OpenTelemetry.Trace;
 
 var serviceName = "OpenLigaDb.Chat";
 var resourceBuilder = ResourceBuilder.CreateDefault()
