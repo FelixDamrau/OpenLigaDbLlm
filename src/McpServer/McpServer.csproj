@@ -33,7 +33,7 @@
       <NSwagNamespace>OpenLigaDb.McpServer.Generated</NSwagNamespace>
     </PropertyGroup>
 
-    <Exec Command="$(NSwagExe) $(NSwagCommand) /Input:$(NSwagInput) /Output:&quot;$(GeneratedClientPath)&quot; /ClassName:$(NSwagClassName) /Namespace:$(NSwagNamespace)" />
+    <Exec Command="$(NSwagExe_Net90) $(NSwagCommand) /Input:$(NSwagInput) /Output:&quot;$(GeneratedClientPath)&quot; /ClassName:$(NSwagClassName) /Namespace:$(NSwagNamespace)" />
 
     <ItemGroup>
       <Compile Include="$(GeneratedClientPath)" />
