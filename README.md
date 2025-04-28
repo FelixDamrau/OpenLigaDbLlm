@@ -35,6 +35,11 @@ This project involves running the C# applications and a monitoring stack using D
 
 3. **Run the .NET projects:**
 
+   Before running the applications, ensure you have the following environment variables set:
+
+   - `HELICONE_API_KEY`: Your Helicone API key. This is used for monitoring and logging API calls via Helicone.
+   - `OPENROUTER_API_KEY`: Your OpenRouter API key. This is used for authenticating with the OpenRouter API.
+
    Navigate to the respective project directories and run the applications using the .NET CLI:
 
    ```bash
@@ -65,17 +70,23 @@ The MCP server exposes the following tools:
 
 The `ChatWithTools` project is a .NET console application that acts as a client to the MCP Server. It demonstrates how to connect to an MCP server, discover available tools, and use them to perform actions (in this case, interacting with the OpenLigaDb API).
 
+Ensure you have set the `HELICONE_API_KEY` and `OPENROUTER_API_KEY` environment variables before running the ChatClient.
+
 To use the MCP tools via the ChatClient, you will interact with the running `ChatWithTools` console application. The specific commands or interface will depend on the implementation within the `ChatWithTools` project. Refer to the ChatClient's output or documentation (if any) for details on how to interact with it and utilize the MCP tools.
 
-## Monitoring
+## Monitoring (OpenTelemetry)
 
-The project includes a Docker Compose setup for a monitoring stack:
+The project includes a Docker Compose setup for a monitoring stack using OpenTelemetry:
 
 - **OpenTelemetry Collector:** Collects telemetry data from the applications.
 - **Loki:** A log aggregation system.
 - **Grafana:** A data visualization and dashboarding tool.
 
 You can access Grafana at `http://localhost:3000` after starting the Docker containers.
+
+## Monitoring (Helicone)
+
+The project also supports monitoring and logging API calls via Helicone. To enable this, ensure you have set the `HELICONE_API_KEY` environment variable.
 
 ## Links
 
