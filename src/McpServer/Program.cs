@@ -10,6 +10,13 @@ Log.Logger = new LoggerConfiguration()
     .MinimumLevel.Override("OpenLigaDb", LogEventLevel.Debug)
     .Enrich.FromLogContext()
     .WriteTo.Console(outputTemplate: "[{Timestamp:yyyy-MM-dd HH:mm:ss.fff} {Level:u3}] {Message:lj}{NewLine}{Exception}")
+    .WriteTo.OpenTelemetry(o =>
+    {
+        o.ResourceAttributes = new Dictionary<string, object>()
+        { 
+            ["service.name"] = "OpenLigaDb.McpServer",
+        };
+    })
     .CreateLogger();
 
 builder.Logging

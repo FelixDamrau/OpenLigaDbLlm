@@ -13,7 +13,10 @@ public class OpenLigaDbTools(OpenLigaDbServiceClient client, ILogger<OpenLigaDbT
     [McpServerTool(Name = "getAvailableLeagues"), Description("Gets all available leagues")]
     public async Task<ICollection<League>> GetAvailableLeagues(CancellationToken cancellationToken)
     {
-        logger.Log(LogLevel.Debug, "[MCP Server Tool] Getting all leagues");
+        using (Serilog.Context.LogContext.PushProperty("tool.name", "getAvailableLeagues"))
+        {
+            logger.Log(LogLevel.Debug, "[MCP Server Tool] Getting all leagues");
+        }
         return await client.GetavailableleaguesAsync(cancellationToken).ConfigureAwait(false);
     }
 
@@ -22,12 +25,15 @@ public class OpenLigaDbTools(OpenLigaDbServiceClient client, ILogger<OpenLigaDbT
         [Description("The filter that is used to filter the league name. (Contains, case-insensitve)")] string filter,
         CancellationToken cancellationToken)
     {
-        logger.Log(LogLevel.Debug, "[MCP Server Tool] Filtering leagues with filter: {Filter}", filter);
+        using (Serilog.Context.LogContext.PushProperty("tool.name", "getFilteredLeagues"))
+        {
+            logger.Log(LogLevel.Debug, "[MCP Server Tool] Filtering leagues with filter: {Filter}", filter);
+        }
         var leagues = await client
             .GetavailableleaguesAsync(cancellationToken)
             .ConfigureAwait(false);
 
-        return [.. leagues.Where(x => x.LeagueName.Contains(filter, StringComparison.OrdinalIgnoreCase))];
+        return [.. leagues.Where(l => l.LeagueName.Contains(filter, StringComparison.OrdinalIgnoreCase))];
     }
 
     [McpServerTool(Name = "getAllTeams"), Description("Gets all teams for the given league in the given season")]
@@ -36,7 +42,10 @@ public class OpenLigaDbTools(OpenLigaDbServiceClient client, ILogger<OpenLigaDbT
         [Description("The year of the season, e.g. 2024 for the season 2024/25")] int leagueSeason,
         CancellationToken cancellationToken)
     {
-        logger.Log(LogLevel.Debug, "[MCP Server Tool] Getting all teams for league/season: {LeagueShortcut}/{LeagueSeason}", leagueShortcut, leagueSeason);
+        using (Serilog.Context.LogContext.PushProperty("tool.name", "getAllTeams"))
+        {
+            logger.Log(LogLevel.Debug, "[MCP Server Tool] Getting all teams for league/season: {LeagueShortcut}/{LeagueSeason}", leagueShortcut, leagueSeason);
+        }
         return await client
             .GetavailableteamsAsync(leagueShortcut, leagueSeason, cancellationToken)
             .ConfigureAwait(false);
@@ -45,7 +54,10 @@ public class OpenLigaDbTools(OpenLigaDbServiceClient client, ILogger<OpenLigaDbT
     [McpServerTool(Name = "echo"), Description("Echoes the given message.")]
     public string Echo(string message)
     {
-        logger.Log(LogLevel.Debug, "[MCP Server Tool] Echoing: {message}", message);
+        using (Serilog.Context.LogContext.PushProperty("tool.name", "echo"))
+        {
+            logger.Log(LogLevel.Debug, "[MCP Server Tool] Echoing: {message}", message);
+        }
         return $"Echo: {message}";
     }
 }

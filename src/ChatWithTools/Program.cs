@@ -10,7 +10,7 @@ using Microsoft.Extensions.Logging;
 using OpenTelemetry.Logs;
 using OpenTelemetry.Resources;
 
-var serviceName = "OpenLigaDbLlm";
+var serviceName = "OpenLigaDb.Chat";
 var resourceBuilder = ResourceBuilder.CreateDefault()
     .AddService(serviceName: serviceName, serviceInstanceId: Environment.MachineName);
 
