@@ -28,7 +28,7 @@
     <PropertyGroup>
       <GeneratedClientPath>$(IntermediateOutputPath)Generated/OpenLigaDbServiceClient.cs</GeneratedClientPath>
       <NSwagCommand>openapi2csclient</NSwagCommand>
-      <NSwagInput>https://api.openligadb.de/swagger/v1/swagger.json</NSwagInput>
+      <NSwagInput>../../openligadb-swagger.json</NSwagInput>
       <NSwagClassName>OpenLigaDbServiceClient</NSwagClassName>
       <NSwagNamespace>OpenLigaDb.McpServer.Generated</NSwagNamespace>
     </PropertyGroup>

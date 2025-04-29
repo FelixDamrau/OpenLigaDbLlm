@@ -9,6 +9,12 @@ This project demonstrates the integration of a .NET ChatClient with an MCP (Mode
 - `docker-compose.yml`: Defines the services for running the OpenTelemetry Collector, Loki, and Grafana using Docker.
 - `otel-collector-config.yaml`: Configuration for the OpenTelemetry Collector.
 
+## OpenLigaDB Swagger File
+
+The `openligadb-swagger.json` file in the project root is a local copy of the OpenLigaDB API swagger definition, downloaded on 4/29/2025. This local file is used for generating the OpenLigaDB service client using NSwag.
+
+A known issue regarding the `match.location` property being nullable in the swagger specification has been addressed in this local copy. For more details, refer to the GitHub issue: https://github.com/OpenLigaDB/OpenLigaDB-Samples/issues/96
+
 ## Prerequisites
 
 - Docker and Docker Compose installed.
