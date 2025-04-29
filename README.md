@@ -80,6 +80,19 @@ Ensure you have set the `HELICONE_API_KEY` and `OPENROUTER_API_KEY` environment 
 
 To use the MCP tools via the ChatClient, you will interact with the running `ChatWithTools` console application. The specific commands or interface will depend on the implementation within the `ChatWithTools` project. Refer to the ChatClient's output or documentation (if any) for details on how to interact with it and utilize the MCP tools.
 
+## Testing the MCP Server
+
+You can test the MCP server using the MCP Inspector tool.
+
+1. Start the MCP Inspector from your terminal (e.g., PowerShell):
+
+   ```powershell
+   npx @modelcontextprotocol/inspector
+   ```
+
+2. In the MCP Inspector, connect to the MCP server. The default host is `http://127.0.0.1:6274/`.
+3. Select `SSE` as the transport type and connect.
+
 ## Monitoring (OpenTelemetry)
 
 The project includes a Docker Compose setup for a monitoring stack using OpenTelemetry:
